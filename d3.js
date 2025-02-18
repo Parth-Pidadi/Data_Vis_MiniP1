@@ -227,7 +227,7 @@ function createHistogram(svg, variable) {
     const values = data.map(d => +d[variable]).filter(d => !isNaN(d));
     
     
-    const histogram = d3.histogram()
+    const histogram = d3.createHistogram()
         .domain(d3.extent(values))
         .thresholds(20);
     
