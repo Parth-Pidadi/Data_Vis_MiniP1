@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Air Quality Analytics</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊💨 Analysis of Air Quality Data, India (2015-2020)</h1>
+            <p>Interactive visualization platform for air quality data analysis</p>
+        </header>
+
+        <div class="controls">
+            <div class="analysis-type">
+                <h3>1. Select Analysis Type</h3>
+                <div class="radio-group">
+                    <input type="radio" id="single" name="analysisType" value="single" checked>
+                    <label for="single">Single Variable Analysis</label>
+                    
+                    <input type="radio" id="double" name="analysisType" value="double">
+                    <label for="double">Two Variable Analysis</label>
+                </div>
+            </div>
+
+            <div class="variable-selection">
+                <h3>2. Select Variables</h3>
+                <div class="variable-inputs">
+                    <div class="input-group">
+                        <label for="variable1">Primary Variable:</label>
+                        <select id="variable1"></select>
+                    </div>
+                    
+                    <div class="input-group" id="var2Group">
+                        <label for="variable2">Secondary Variable:</label>
+                        <select id="variable2"></select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chart-controls">
+                <h3>3. Customize Visualization</h3>
+                <button id="orientationToggle" type="button">
+                    <span class="icon">🔄</span>
+                    Toggle Chart Orientation
+                </button>
+            </div>
+        </div>
+        
+        <div id="chart-container">
+            <div id="visualization"></div>
+            <div id="legend"></div>
+        </div>
+
+        <footer>
+            <p>Created with 💡 by Parth Pidadi | Data Source: <a href="https://www.kaggle.com/datasets/rohanrao/air-quality-data-in-india/data?select=city_day.csv">Kaggle - Air Quality Data in India (2015 - 2020)</a></p>
+        </footer>
+    </div>
+    <script src="d3.js"></script>
+</body>
+</html>
