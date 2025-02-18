@@ -5,12 +5,12 @@ let margin = { top: 60, right: 40, bottom: 80, left: 80 };
 let width = 1000 - margin.left - margin.right;
 let height = 500 - margin.top - margin.bottom;
 
-// Define variables for visualization
+//Variables for visualization
 const numericalColumns = ['PM2.5', 'PM10', 'NO', 'NO2', 'NOx', 'NH3', 'CO', 'SO2', 'O3', 'Benzene', 'Toluene', 'Xylene', 'AQI'];
 const categoricalColumns = ['City', 'AQI_Bucket'];
 const allVariables = [...numericalColumns, ...categoricalColumns];
 
-// Define units for numerical columns
+
 const unitMap = {
     'PM2.5': 'μg/m³',
     'PM10': 'μg/m³',
@@ -27,10 +27,10 @@ const unitMap = {
     'AQI': ''
 };
 
-// Define correct order for AQI buckets
+
 const aqiBucketOrder = ['Good', 'Satisfactory', 'Moderate', 'Poor', 'Very Poor', 'Severe'];
 
-// Initialize the visualization
+
 document.addEventListener('DOMContentLoaded', function() {
     initializeUI();
     loadData();
@@ -42,10 +42,10 @@ function initializeUI() {
     const variable2Select = document.getElementById('variable2');
     const var2Group = document.getElementById('var2Group');
     
-    // Initially hide second variable
+    
     var2Group.style.display = 'none';
     
-    // Populate dropdowns
+    
     allVariables.forEach(variable => {
         const option1 = document.createElement('option');
         option1.value = variable;
@@ -58,7 +58,7 @@ function initializeUI() {
         variable2Select.appendChild(option2);
     });
     
-    // Set default selections
+    
     variable1Select.value = numericalColumns[0];
     variable2Select.value = numericalColumns[1];
 }
@@ -67,13 +67,13 @@ function setupEventListeners() {
     document.getElementById('variable1').addEventListener('change', updateVisualization);
     document.getElementById('variable2').addEventListener('change', updateVisualization);
     
-    // Fix the toggle button event listener
+    
     document.getElementById('orientationToggle').addEventListener('click', () => {  // Changed from 'change' to 'click'
         currentOrientation = currentOrientation === 'vertical' ? 'horizontal' : 'vertical';
         updateVisualization();
     });
     
-    // Analysis type change handler
+    
     document.querySelectorAll('input[name="analysisType"]').forEach(radio => {
         radio.addEventListener('change', (e) => {
             const var2Group = document.getElementById('var2Group');
@@ -108,10 +108,10 @@ function updateVisualization() {
     const var1 = document.getElementById('variable1').value;
     const var2 = document.getElementById('variable2').value;
     
-    // Clear previous visualization
+    
     d3.select('#visualization').html('');
     
-    // Create SVG
+    
     const svg = d3.select('#visualization')
         .append('svg')
         .attr('width', width + margin.left + margin.right)
@@ -140,7 +140,7 @@ function createBarChart(svg, variable) {
     let barData;
     
     if (variable === 'AQI_Bucket') {
-        // Create data with the correct order for AQI buckets
+        
         frequencies = d3.rollup(data, v => v.length, d => d[variable]);
         barData = aqiBucketOrder
             .map(bucket => ({
@@ -162,7 +162,7 @@ function createBarChart(svg, variable) {
             .range([height, 0])
             .domain([0, d3.max(barData, d => d.value)]);
         
-        // Add bars
+        
         svg.selectAll('.bar')
             .data(barData)
             .enter()
@@ -173,7 +173,7 @@ function createBarChart(svg, variable) {
             .attr('y', d => y(d.value))
             .attr('height', d => height - y(d.value));
         
-        // Add axes
+        
         svg.append('g')
             .attr('class', 'axis')
             .attr('transform', `translate(0,${height})`)
@@ -188,7 +188,7 @@ function createBarChart(svg, variable) {
             
         addChartLabels(svg, variable, 'Number of Observations', 'bar');
     } else {
-        // Horizontal orientation
+        
         const y = d3.scaleBand()
             .range([height, 0])
             .padding(0.1)
@@ -198,7 +198,7 @@ function createBarChart(svg, variable) {
             .range([0, width])
             .domain([0, d3.max(barData, d => d.value)]);
         
-        // Add bars
+        
         svg.selectAll('.bar')
             .data(barData)
             .enter()
@@ -209,7 +209,7 @@ function createBarChart(svg, variable) {
             .attr('x', 0)
             .attr('width', d => x(d.value));
         
-        // Add axes
+        
         svg.append('g')
             .attr('class', 'axis')
             .attr('transform', `translate(0,${height})`)
@@ -226,7 +226,7 @@ function createBarChart(svg, variable) {
 function createHistogram(svg, variable) {
     const values = data.map(d => +d[variable]).filter(d => !isNaN(d));
     
-    // Create histogram bins
+    
     const histogram = d3.histogram()
         .domain(d3.extent(values))
         .thresholds(20);
@@ -242,7 +242,7 @@ function createHistogram(svg, variable) {
             .domain([0, d3.max(bins, d => d.length)])
             .range([height, 0]);
         
-        // Add bars
+        
         svg.selectAll('.bar')
             .data(bins)
             .enter()
@@ -255,7 +255,7 @@ function createHistogram(svg, variable) {
             .append('title')
             .text(d => `Range: ${d.x0.toFixed(2)} - ${d.x1.toFixed(2)}\nCount: ${d.length}`);
         
-        // Add axes
+        
         svg.append('g')
             .attr('class', 'axis')
             .attr('transform', `translate(0,${height})`)
@@ -267,7 +267,7 @@ function createHistogram(svg, variable) {
             
         addChartLabels(svg, variable, 'Number of Observations', 'histogram');
     } else {
-        // Horizontal orientation
+        
         const y = d3.scaleLinear()
             .domain([bins[0].x0, bins[bins.length - 1].x1])
             .range([height, 0]);
@@ -276,7 +276,7 @@ function createHistogram(svg, variable) {
             .domain([0, d3.max(bins, d => d.length)])
             .range([0, width]);
         
-        // Add bars
+        
         svg.selectAll('.bar')
             .data(bins)
             .enter()
@@ -289,7 +289,7 @@ function createHistogram(svg, variable) {
             .append('title')
             .text(d => `Range: ${d.x0.toFixed(2)} - ${d.x1.toFixed(2)}\nCount: ${d.length}`);
         
-        // Add axes
+        
         svg.append('g')
             .attr('class', 'axis')
             .attr('transform', `translate(0,${height})`)
@@ -304,10 +304,10 @@ function createHistogram(svg, variable) {
 }
 
 function createScatterPlot(svg, var1, var2) {
-    // Filter out any NaN values
+    
     const filteredData = data.filter(d => !isNaN(+d[var1]) && !isNaN(+d[var2]));
     
-    // Create scales
+    
     const x = d3.scaleLinear()
         .domain(d3.extent(filteredData, d => +d[var1]))
         .range([0, width]);
@@ -316,7 +316,7 @@ function createScatterPlot(svg, var1, var2) {
         .domain(d3.extent(filteredData, d => +d[var2]))
         .range([height, 0]);
     
-    // Add dots
+    
     svg.selectAll('.scatter-dot')
         .data(filteredData)
         .enter()
@@ -328,7 +328,7 @@ function createScatterPlot(svg, var1, var2) {
         .append('title')
         .text(d => `${var1}: ${d[var1]}\n${var2}: ${d[var2]}`);
     
-    // Add axes
+    
     svg.append('g')
         .attr('class', 'axis')
         .attr('transform', `translate(0,${height})`)
@@ -342,14 +342,14 @@ function createScatterPlot(svg, var1, var2) {
 }
 
 function createStripPlot(svg, var1, var2) {
-    // Determine which variable is categorical and which is numerical
+    
     const categoricalVar = categoricalColumns.includes(var1) ? var1 : var2;
     const numericalVar = categoricalColumns.includes(var1) ? var2 : var1;
     
-    // Filter out any NaN values
+    
     const filteredData = data.filter(d => !isNaN(+d[numericalVar]));
     
-    // Handle AQI Bucket ordering
+    
     let domain;
     if (categoricalVar === 'AQI_Bucket') {
         domain = aqiBucketOrder;
@@ -358,7 +358,7 @@ function createStripPlot(svg, var1, var2) {
     }
     
     if (currentOrientation === 'vertical') {
-        // Create scales
+        
         const x = d3.scaleBand()
             .domain(domain)
             .range([0, width])
@@ -368,10 +368,10 @@ function createStripPlot(svg, var1, var2) {
             .domain(d3.extent(filteredData, d => +d[numericalVar]))
             .range([height, 0]);
         
-        // Add jittering
+        
         const jitterWidth = x.bandwidth() * 0.4;
         
-        // Add dots
+        
         svg.selectAll('.strip-dot')
             .data(filteredData)
             .enter()
@@ -386,7 +386,7 @@ function createStripPlot(svg, var1, var2) {
             .append('title')
             .text(d => `${categoricalVar}: ${d[categoricalVar]}\n${numericalVar}: ${d[numericalVar]}`);
         
-        // Add axes
+        
         svg.append('g')
             .attr('class', 'axis')
             .attr('transform', `translate(0,${height})`)
@@ -401,7 +401,7 @@ function createStripPlot(svg, var1, var2) {
             
         addChartLabels(svg, categoricalVar, numericalVar, 'strip');
     } else {
-        // Horizontal orientation
+        
         const y = d3.scaleBand()
             .domain(domain)
             .range([height, 0])
@@ -411,10 +411,10 @@ function createStripPlot(svg, var1, var2) {
             .domain(d3.extent(filteredData, d => +d[numericalVar]))
             .range([0, width]);
         
-        // Add jittering
+        
         const jitterHeight = y.bandwidth() * 0.4;
         
-        // Add dots
+        
         svg.selectAll('.strip-dot')
             .data(filteredData)
             .enter()
@@ -429,7 +429,7 @@ function createStripPlot(svg, var1, var2) {
             .append('title')
             .text(d => `${categoricalVar}: ${d[categoricalVar]}\n${numericalVar}: ${d[numericalVar]}`);
         
-        // Add axes
+        
         svg.append('g')
             .attr('class', 'axis')
             .attr('transform', `translate(0,${height})`)
@@ -444,11 +444,11 @@ function createStripPlot(svg, var1, var2) {
 }
 
 function addChartLabels(svg, xLabel, yLabel, chartType) {
-    // Get display labels with units for numerical columns
+    
     const xDisplayLabel = getDisplayLabel(xLabel);
     const yDisplayLabel = getDisplayLabel(yLabel);
     
-    // Add title
+    //Title
     let title;
     switch (chartType) {
         case 'scatter':
@@ -472,7 +472,7 @@ function addChartLabels(svg, xLabel, yLabel, chartType) {
         .style('text-anchor', 'middle')
         .text(title);
     
-    // Add X axis label
+    //X axis label
     svg.append('text')
         .attr('class', 'axis-label')
         .attr('x', width / 2)
@@ -480,7 +480,7 @@ function addChartLabels(svg, xLabel, yLabel, chartType) {
         .style('text-anchor', 'middle')
         .text(xDisplayLabel);
     
-    // Add Y axis label
+    //Y axis label
     svg.append('text')
         .attr('class', 'axis-label')
         .attr('transform', 'rotate(-90)')
@@ -490,7 +490,7 @@ function addChartLabels(svg, xLabel, yLabel, chartType) {
         .text(yDisplayLabel);
 }
 
-// Helper function to get display label with units
+
 function getDisplayLabel(variable) {
     if (numericalColumns.includes(variable) && unitMap[variable]) {
         return `${variable} (${unitMap[variable]})`;

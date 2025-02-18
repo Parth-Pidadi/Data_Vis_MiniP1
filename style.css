@@ -1,4 +1,4 @@
-/* Modern Design System */
+
 :root {
     --primary-color: #2563eb;
     --secondary-color: #3b82f6;
@@ -78,7 +78,7 @@ header p {
 
 .variable-inputs {
     display: grid;
-    grid-template-columns: 1fr 1fr;  /* This ensures equal width columns */
+    grid-template-columns: 1fr 1fr;  
     gap: 1.5rem;
     width: 100%;
 }
@@ -87,14 +87,14 @@ header p {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    width: 100%;  /* Ensure full width within its grid cell */
+    width: 100%;  
 }
 
 .input-group select {
-    width: 100%;  /* Make select elements fill their container */
+    width: 100%;  
 }
 
-/* Ensure consistent spacing */
+
 .input-group label {
     font-weight: 500;
     color: var(--text-primary);
@@ -188,7 +188,7 @@ footer {
     padding: 2rem 0;
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
     .container {
         padding: 1rem;
